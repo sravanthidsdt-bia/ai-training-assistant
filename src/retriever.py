@@ -5,7 +5,7 @@ from __future__ import annotations
 import chromadb
 from chromadb.utils import embedding_functions
 
-from src.config import CHROMA_DIR, ROUTE_ADMIN, TOP_K
+from src.config import CHROMA_DIR, TOP_K
 
 
 class DocumentRetriever:
@@ -32,14 +32,7 @@ class DocumentRetriever:
         top_k: int = TOP_K,
     ) -> list[dict]:
         """Retrieve top-k chunks for a query within a route's knowledge base."""
-        if route == ROUTE_ADMIN:
-            where_filter = {
-                "$or": [
-                    {"route": {"$eq": "admin_policy"}},
-                ]
-            }
-        else:
-            where_filter = {"route": {"$eq": route}}
+        where_filter = {"route": {"$eq": route}}
 
         results = self._collection.query(
             query_texts=[query],
