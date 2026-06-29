@@ -20,6 +20,9 @@ for _mod in list(sys.modules):
         del sys.modules[_mod]
 
 from src.config import CHROMA_DIR, ROUTE_LABELS
+from src.env_config import api_key_help_text, load_gemini_api_key
+
+load_gemini_api_key()
 
 # Hardcoded model — do not read from env/cache
 ACTIVE_GEMINI_MODEL = "gemini-3.5-flash"
@@ -110,7 +113,7 @@ def get_assistant():
     if env_error:
         return None, env_error
 
-    if not os.getenv("GEMINI_API_KEY"):
+    if not load_gemini_api_key():
         return None, None
 
     try:
@@ -145,11 +148,10 @@ def main():
 
         if env_error:
             st.error(env_error)
-        elif not os.getenv("GEMINI_API_KEY"):
-            st.error("Set GEMINI_API_KEY in .env file")
-            st.markdown(
-                "[Get free API key](https://aistudio.google.com/apikey)"
-            )
+        elif not load_gemini_api_key():
+            st.error("Gemini API key not configured")
+            st.markdown(api_key_help_text())
+            st.markdown("[Get a free API key](https://aistudio.google.com/apikey)")
         else:
             st.caption(f"Model: `{ACTIVE_GEMINI_MODEL}`")
             st.success("Gemini API connected")
@@ -216,10 +218,8 @@ def main():
                         "Click 'Build Knowledge Base' in the sidebar."
                     )
                 else:
-                    st.error(
-                        "Gemini API key not configured. "
-                        "Add GEMINI_API_KEY to your .env file."
-                    )
+                    st.error("Gemini API key not configured.")
+                    st.markdown(api_key_help_text())
         else:
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):

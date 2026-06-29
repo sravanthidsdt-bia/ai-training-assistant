@@ -8,8 +8,10 @@ import httpx
 from dotenv import load_dotenv
 
 from src.config import PROJECT_ROOT, SYSTEM_PROMPT
+from src.env_config import load_gemini_api_key
 
 load_dotenv(PROJECT_ROOT / ".env", override=True)
+load_gemini_api_key()
 
 GEMINI_API_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
@@ -49,11 +51,11 @@ class LLMGenerator:
     """Generate responses via Gemini REST API (supports AQ. auth keys)."""
 
     def __init__(self, api_key: str | None = None) -> None:
-        key = (api_key or os.getenv("GEMINI_API_KEY") or "").strip()
+        key = (api_key or load_gemini_api_key() or "").strip()
         if not key:
             raise ValueError(
-                "GEMINI_API_KEY not set. Add it to .env — get a key at "
-                "https://aistudio.google.com/apikey"
+                "GEMINI_API_KEY not set. Local: add to .env. "
+                "Streamlit Cloud: add to App Settings → Secrets."
             )
         self._api_key = key
 
