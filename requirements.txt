@@ -1,0 +1,9 @@
+# Core
+python-dotenv>=1.0.0
+httpx>=0.28.0
+
+# Vector DB (includes built-in ONNX embeddings — no torch needed)
+chromadb>=0.5.0
+
+# UI
+streamlit>=1.38.0
