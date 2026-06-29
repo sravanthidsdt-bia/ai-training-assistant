@@ -1,4 +1,4 @@
-# AI Training Assistant for New Employees
+# AI Training Assistant for New Employee
 
 An AI-powered onboarding assistant that routes employee questions to the right knowledge sources and generates clear, context-aware answers using **Retrieval-Augmented Generation (RAG)** and **Google Gemini**.
 
